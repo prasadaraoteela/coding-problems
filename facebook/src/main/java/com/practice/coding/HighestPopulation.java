@@ -10,33 +10,32 @@ import java.util.Map;
 public class HighestPopulation {
 
     public int findYearWithHighestPopulation(List<Person> people) {
+        final Map<Integer, Integer> yearAndPopulationMap = getPopulationByYear(people);
+        return getYearWithHighestPopulation(yearAndPopulationMap);
+    }
+
+    private Map<Integer, Integer> getPopulationByYear(List<Person> people) {
         final Map<Integer, Integer> yearAndPopulationMap = new HashMap<>();
 
-        int minYear = Integer.MAX_VALUE;
-        int maxYear = Integer.MIN_VALUE;
-
         for (Person person : people) {
-            minYear = Math.min(minYear, person.getBirthYear());
-            maxYear = Math.max(maxYear, person.getDeathYear());
+            for (int year = person.getBirthYear(); year < person.getDeathYear(); year++) {
+                yearAndPopulationMap.put(year, yearAndPopulationMap.getOrDefault(year, 0) + 1);
+            }
         }
+        return yearAndPopulationMap;
+    }
 
-        for (int year = minYear; year < maxYear; year++) {
-            for (Person person : people) {
-                if (person.getBirthYear() <= year && person.getDeathYear() > year) {
-                    yearAndPopulationMap.put(year, yearAndPopulationMap.getOrDefault(year, 0) + 1);
-                }
-            }
-        }
-        System.out.println(yearAndPopulationMap);
-        int highestPopulation = Integer.MIN_VALUE;
-        int maxYearWithHighestPopulation = Integer.MIN_VALUE;
+    private int getYearWithHighestPopulation(Map<Integer, Integer> yearAndPopulationMap) {
+        int highestPopulation = Integer.MIN_VALUE, yearWithHighestPopulation = Integer.MIN_VALUE;
+
         for (Integer year : yearAndPopulationMap.keySet()) {
-            if (highestPopulation < yearAndPopulationMap.getOrDefault(year, 0)) {
-                highestPopulation = yearAndPopulationMap.getOrDefault(year, 0);
-                maxYearWithHighestPopulation = year;
+            final Integer populationByYear = yearAndPopulationMap.getOrDefault(year, 0);
+            if (highestPopulation < populationByYear) {
+                highestPopulation = populationByYear;
+                yearWithHighestPopulation = year;
             }
         }
-        return maxYearWithHighestPopulation;
+        return yearWithHighestPopulation;
     }
 
     public static void main(String[] args) {
