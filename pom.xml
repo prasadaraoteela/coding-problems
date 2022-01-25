@@ -13,6 +13,7 @@
         <module>hacker-rank</module>
         <module>geeksforgeeks</module>
         <module>facebook</module>
+        <module>datastructures</module>
     </modules>
 
     <properties>
